@@ -1,0 +1,5 @@
+To create an XPI file use the following command :
+    zip -r simplenote-0.1.xpi chrome chrome.manifest defaults install.rdf
+
+Drag and Drop onto Firefox OR use File->Open File menu, to install 
+
