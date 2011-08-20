@@ -1,0 +1,7 @@
+content   simplenote                 chrome/content/
+skin      simplenote   classic/1.0   chrome/skin/
+locale    simplenote   en-US         chrome/locale/en-US/
+
+
+overlay   chrome://browser/content/browser.xul   chrome://simplenote/content/ff-overlay.xul
+style chrome://global/content/customizeToolbar.xul chrome://simplenote/skin/overlay.css
