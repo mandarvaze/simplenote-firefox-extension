@@ -44,12 +44,19 @@ var simplenote = {
 
     // https://simple-note.appspot.com/api2/index?length=[number of notes]&mark=[bookmark key]&since=[time value]&auth=[auth token]&email=[email]
     url = "https://simple-note.appspot.com/api2/index?length="+notesToLoad;
+    //alert('Loading notes from :' + url);
 
     let request = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
                 .createInstance(Components.interfaces.nsIXMLHttpRequest);
     request.onload = function(aEvent) {
       responseText = aEvent.target.responseText;
-      alert('Response :' + responseText);
+      resp = JSON.parse(responseText);
+      noteListbox = document.getElementById("simplenote.mainwindow.notelist");
+      for (var i=0;i<resp.count;i++) {
+        if (resp.data[i].deleted == 0)
+          noteListbox.appendItem('val '+resp.data[i].key, resp.data[i].key);
+      }
+      //alert('Note Count:' + resp.count);
     };
     request.onerror = function(aEvent) {
       errorText = aEvent.target.responseText;
@@ -61,15 +68,16 @@ var simplenote = {
   },
 
   newNote: function() {
-    document.getElementById("simplenote.mainwindow.notedata").value = "";
+    noteTextbox = document.getElementById("simplenote.mainwindow.notedata");
+    noteTextbox.value = "";
   },
 
   saveNote: function() {
-    //Create JSON like {"content" : "New note!"}
-    userEnteredText = document.getElementById("simplenote.mainwindow.notedata").value
+    noteTextbox = document.getElementById("simplenote.mainwindow.notedata");
+    userEnteredText = noteTextbox.value
 
     if (userEnteredText.length <=0) {
-      alert("Please enter data first");
+      alert("Note is empty. Enter some text and then Save.");
       return;
     }
 
@@ -83,7 +91,14 @@ var simplenote = {
                 .createInstance(Components.interfaces.nsIXMLHttpRequest);
     request.onload = function(aEvent) {
       newNoteKey = aEvent.target.responseText;
-      alert('New Note Key :' + newNoteKey);
+      resp = JSON.parse(responseText);
+      noteListbox = document.getElementById("simplenote.mainwindow.notelist");
+      for (var i=0;i<resp.count;i++) {
+        // Inserting at the top isn't working
+        noteListbox.insertItemAt(0,'val '+resp.data[i].key, resp.data[i].key);
+        noteListbox.selectedIndex = 0;
+      }
+      //alert('New Note Key :' + newNoteKey);
     };
     request.onerror = function(aEvent) {
       newNoteKey = aEvent.target.responseText;
@@ -99,15 +114,41 @@ var simplenote = {
                                   .getService(Components.interfaces.nsIPromptService);
 
     if (promptService.confirm(window, "Confirm", "Are you sure you want to delete the note ?")) {
-      alert("OK, deleting the note now");
+      alert("Too bad, This is not yet implemented");
     } else {
       alert("Good choice, Not deleting the note");
     }
+  },
+  
+  fetchNote: function() {
+    noteListbox = document.getElementById("simplenote.mainwindow.notelist");
+    noteTextbox = document.getElementById("simplenote.mainwindow.notedata");
+    url = "https://simple-note.appspot.com/api2/data/"+this.value
+    // alert('Loading :' + url);
+
+    let request = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+                .createInstance(Components.interfaces.nsIXMLHttpRequest);
+
+    request.onload = function(aEvent) {
+      responseText = aEvent.target.responseText;
+      //alert(responseText);
+      resp = JSON.parse(responseText);
+      noteTextbox.value = resp.content;
+    };
+
+    request.onerror = function(aEvent) {
+      errorText = aEvent.target.responseText;
+      alert('Error connecting to URL: '+ errorText);
+    };
+
+    request.open("GET", url, true);
+    request.send(null);
   }
 };
 
 function onLoad(){
   simplenotePrefs.init();
   simplenote.login();
-  //simplenote.loadNotes();
+  document.getElementById("simplenote.mainwindow.notelist").onselect = simplenote.fetchNote
+  simplenote.loadNotes();
 }
