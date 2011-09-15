@@ -1,5 +1,8 @@
-* Note list should have human-readable labels (First line of the note)
+* Multiline New note (Currently only single line note is saved)
 * New item should immediately appear in the note list
 * Delete selected note
 * Save (update) existing note
+
+Done : (Sept 15, 2011)
+* Note list should have human-readable labels (First line of the note)
 
