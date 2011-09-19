@@ -1,11 +1,2 @@
-To create an XPI file use the following command :
-    zip -r simplenote-0.1.xpi chrome chrome.manifest defaults install.rdf
-
-Drag and Drop onto Firefox OR use File->Open File menu, to install 
-
-Debugging:
-==========
-To see debug messages, set browser.dom.window.dump.enabled to true in about:config
-
-On Windows, start firefox with "-console" commandline option
-On other OS, starting firefox from terminal is enough.
+Please refer to Wiki here :
+https://github.com/mandarvaze/simplenote-firefox-extension/wiki

@@ -1,8 +1,4 @@
-* Multiline New note (Currently only single line note is saved)
-* New item should immediately appear in the note list
-* Delete selected note
-* Save (update) existing note
+Open Issues are now on github
+https://github.com/mandarvaze/simplenote-firefox-extension/issues
 
-Done : (Sept 15, 2011)
-* Note list should have human-readable labels (First line of the note)
-
+There are several TODO markers in the code related to performance improvement, code smell, possible bugs etc.
