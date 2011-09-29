@@ -6,4 +6,6 @@
 #Better to use date stamp than version number
 DATE=`date +%F`
 ZIP=/usr/bin/zip
+SED=/bin/sed
+$SED -e s/SN_VERSION/$DATE/ install_src.rdf > install.rdf
 $ZIP -r simplenote-$DATE.xpi chrome chrome.manifest defaults install.rdf

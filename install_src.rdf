@@ -4,7 +4,7 @@
     <em:id>simplenote@firefox-addon.com</em:id>
     <em:type>2</em:type>
     <em:name>Simplenote Firefox Add-on</em:name>
-    <em:version>0.1</em:version>
+    <em:version>SN_VERSION</em:version>
     <em:creator>Mandar Vaze</em:creator>
     <em:contributor></em:contributor>
     <em:description>Firefox add-on to access and create notes using simplenote</em:description>

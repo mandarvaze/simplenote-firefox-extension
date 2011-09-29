@@ -1,8 +1,8 @@
-<!ENTITY simplenote.label "Your localized menuitem">
-<!ENTITY simplenoteContext.label "Your Menuitem">
+<!ENTITY simplenote.label "Simplenote">
+<!ENTITY simplenoteContext.label "Simplenote">
 <!ENTITY simplenoteContext.accesskey "Y">
-<!ENTITY simplenoteToolbarButton.label "Your Toolbar Button">
+<!ENTITY simplenoteToolbarButton.label "Simplenote">
 <!ENTITY simplenoteToolbarButton.tooltip "Simplenote">
-<!ENTITY simplenoteSidebar.label "Your Sidebar">
-<!ENTITY simplenoteToolbar.name  "example">
-<!ENTITY simplenoteToolbar.label "This is an example toolbar. You can hide it under View &gt; toolbars &gt; &simplenoteToolbar.name;">
+<!ENTITY simplenoteSidebar.label "Simplenote Sidebar">
+<!ENTITY simplenoteToolbar.name  "Simplenote">
+<!ENTITY simplenoteToolbar.label "This is an Simplenote toolbar. You can hide it under View &gt; toolbars &gt; &simplenoteToolbar.name;">
