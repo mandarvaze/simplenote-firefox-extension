@@ -19,8 +19,8 @@ var simplenotePrefs = {
 };
 
 var newnoteflag = false;
-var notes = {};
-var loggedIn = false;
+    notes = {};
+    loggedIn = false;
 
 function logMsg(msg) {
   dump(msg + '\n');
@@ -28,7 +28,7 @@ function logMsg(msg) {
 
 function fetchNote(Note) {
   url = "https://simple-note.appspot.com/api2/data/"+Note.key
-  //logMsg('Loading :' + url + '\n');
+  logMsg('Loading :' + url + '\n');
 
   let request = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
               .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -134,28 +134,30 @@ var simplenote = {
       alert("Note is empty. Enter some text and then Save.");
       return;
     } else if (newnoteflag == false) {
-      alert("Updating existing notes not yet implemented.");
-      return;
-    }
+        logMsg('Updating existing note');
+        url = "https://simple-note.appspot.com/api2/data/"+
+               selected_note.key + "?auth="+
+               simplenotePrefs.getString("authtok") + "&email="+
+               simplenotePrefs.getString("username");
+      } else {
+          logMsg('Creating new note');
+          url = "https://simple-note.appspot.com/api2/data?auth="+
+                 simplenotePrefs.getString("authtok") + "&email="+
+                 simplenotePrefs.getString("username");
+      }
+
+    logMsg('Saving note - URL :' + url);
 
     var noteBody = '{"content" : "' + userEnteredText +'" }';
-
-    url = "https://simple-note.appspot.com/api2/data?auth="+
-           simplenotePrefs.getString("authtok") + "&email="+
-           simplenotePrefs.getString("username");
 
     let request = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
                 .createInstance(Components.interfaces.nsIXMLHttpRequest);
 
     request.onload = function(aEvent) {
-      newNoteKey = aEvent.target.responseText;
-      resp = JSON.parse(responseText);
-      noteListbox = document.getElementById("simplenote.mainwindow.notelist");
-      for (var i=0;i<resp.count;i++) {
-        // Inserting at the top isn't working
-        noteListbox.insertItemAt(0,'val '+resp.data[i].key, resp.data[i].key);
-        noteListbox.selectedIndex = 0;
-      }
+      responseText = aEvent.target.responseText;
+      // TODO : Need to distinguish between new note and update note 
+      logMsg('Update Note Responded with :' + responseText)
+      alert('Saved');
     };
 
     request.onerror = function(aEvent) {
@@ -171,15 +173,41 @@ var simplenote = {
     var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
                                   .getService(Components.interfaces.nsIPromptService);
 
+    noteListbox = document.getElementById("simplenote.mainwindow.notelist");
+
     if (promptService.confirm(window, "Confirm", "Are you sure you want to delete the note ?")) {
-      alert("Too bad, This is not yet implemented");
+      var noteBody = '{"deleted" : 1}';
+  
+      url = "https://simple-note.appspot.com/api2/data/"+
+             selected_note.key + "?auth="+
+             simplenotePrefs.getString("authtok") + "&email="+
+             simplenotePrefs.getString("username");
+  
+      logMsg('Deleting Note - URL :' + url);
+
+      let request = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+                  .createInstance(Components.interfaces.nsIXMLHttpRequest);
+  
+      request.onload = function(aEvent) {
+        deleteResp = aEvent.target.responseText;
+        logMsg('Delete Note Responded with :' + deleteResp);
+        alert('Deleted');
+      };
+  
+      request.onerror = function(aEvent) {
+        deleteResp = aEvent.target.responseText;
+        alert('Error connecting to URL');
+      };
+      request.open("POST", url, true);
+      request.send(noteBody);
     } else {
-      alert("Good choice, Not deleting the note");
+      alert("Not deleting the note");
     }
   },
 
   populateTextbox: function() {
     noteTextbox = document.getElementById("simplenote.mainwindow.notedata");
+    selected_note = notes[this.value]
     content = notes[this.value].content;
     if (content != undefined)
       noteTextbox.value = content;
@@ -190,5 +218,5 @@ function onLoad(){
   simplenotePrefs.init();
   simplenote.login();
   document.getElementById("simplenote.mainwindow.notelist").onselect = simplenote.populateTextbox
-  simplenote.loadNotes();
+  setTimeout(simplenote.loadNotes(), 1000);
 }
